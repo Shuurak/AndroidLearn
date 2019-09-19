@@ -1,5 +1,6 @@
 package com.example.activity;
 
+import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 
@@ -13,13 +14,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import java.security.Timestamp;
-import java.util.Date;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String LOG_TEG = "Activity state info";
+    public static final String ACT_FOR_START_NEW_ACT = "com.example.activity.START_SECOND_ACT";
+    public static final String ADDITIONAL_MSG = "ADDITIONAL_MSG";
 
 
     @Override
@@ -28,6 +29,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(LOG_TEG, "onCreate");
+
+        Button explicit = findViewById(R.id.startButtonExpl);
+        explicit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), SecondActivity.class);
+                intent.putExtra(ADDITIONAL_MSG, "This activity was started by explicit call");
+                startActivity(intent);
+            }
+        });
+
+        Button implicit = findViewById(R.id.startButtonIpml);
+      implicit.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              Intent intent = new Intent(ACT_FOR_START_NEW_ACT);
+              intent.putExtra(ADDITIONAL_MSG, "This activity was started by implicit call");
+              startActivity(intent);
+          }
+      });
     }
 
     @Override
