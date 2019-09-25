@@ -18,6 +18,7 @@
         />
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="This is the main activity!"
@@ -39,7 +40,40 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
-     <Button
+    <Button
+        android:id="@+id/startButtonService"
+        android:layout_width="89dp"
+        android:layout_height="119dp"
+
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="156dp"
+        android:text="Start first service"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <Button
+        android:id="@+id/stopButtonService"
+        android:layout_width="89dp"
+        android:layout_height="119dp"
+
+        android:layout_marginLeft="160dp"
+        android:layout_marginTop="156dp"
+        android:text="Stop all services"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <Button
+        android:id="@+id/startButtonIntentService"
+        android:layout_width="89dp"
+        android:layout_height="119dp"
+
+        android:layout_marginLeft="304dp"
+        android:layout_marginTop="156dp"
+        android:text="Start intent service"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <Button
         android:id="@+id/startButtonIpml"
         android:layout_width="89dp"
         android:layout_height="119dp"
@@ -49,5 +83,16 @@
 
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintRight_toRightOf="parent"/>
+
+    <EditText
+        android:id="@+id/onMainLogger"
+        android:layout_width="383dp"
+        android:layout_height="105dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

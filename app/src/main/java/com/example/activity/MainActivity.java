@@ -15,12 +15,21 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
+
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String LOG_TEG = "Activity state info";
+    private static final String LOG_TEG = "Activity state info";
     public static final String ACT_FOR_START_NEW_ACT = "com.example.activity.START_SECOND_ACT";
     public static final String ADDITIONAL_MSG = "ADDITIONAL_MSG";
+
+    private int taskNum = 0;
+    Random rand = new Random();
+
+
+//    public EditText logger = findViewById(R.id.onMainLogger);
 
 
     @Override
@@ -49,6 +58,35 @@ public class MainActivity extends AppCompatActivity {
               startActivity(intent);
           }
       });
+
+        final Button startService = findViewById(R.id.startButtonService);
+        startService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startService(new Intent(v.getContext(), FirstSevice.class));
+            }
+        });
+
+        Button startIntentService = findViewById(R.id.startButtonIntentService);
+        startIntentService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), MyIntentService.class);
+                intent.putExtra(MyIntentService.SERVICE_PARAM_TASK, "Task #" + taskNum++);
+                intent.putExtra(MyIntentService.SERVICE_PARAM_TIME, rand.nextInt(8)+10);
+
+                startService(intent);
+            }
+        });
+
+        Button stopAllServices = findViewById(R.id.stopButtonService);
+        stopAllServices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopService(new Intent(v.getContext(), FirstSevice.class));
+                stopService(new Intent(v.getContext(), MyIntentService.class));
+            }
+        });
     }
 
     @Override
