@@ -1,19 +1,13 @@
 package com.example.activity;
 
 import android.content.Intent;
-import android.icu.text.SimpleDateFormat;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -23,13 +17,14 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TEG = "Activity state info";
     public static final String ACT_FOR_START_NEW_ACT = "com.example.activity.START_SECOND_ACT";
+    public static final String SEND_NEW_BROADCAST_MSG = "com.example.activity.SEND_NEW_BROADCAST";
     public static final String ADDITIONAL_MSG = "ADDITIONAL_MSG";
 
     private int taskNum = 0;
     Random rand = new Random();
 
-
-//    public EditText logger = findViewById(R.id.onMainLogger);
+    public EditText textEdit;
+    private MyReceiver receiver = new MyReceiver();
 
 
     @Override
@@ -39,7 +34,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(LOG_TEG, "onCreate");
 
-        Button explicit = findViewById(R.id.startButtonExpl);
+        textEdit = findViewById(R.id.onMainTextLine);
+
+        Button explicit = findViewById(R.id.startExplButton);
         explicit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button implicit = findViewById(R.id.startButtonIpml);
+        Button implicit = findViewById(R.id.startIpmlButton);
       implicit.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
@@ -59,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
           }
       });
 
-        final Button startService = findViewById(R.id.startButtonService);
+        final Button startService = findViewById(R.id.startServiceButton);
         startService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button startIntentService = findViewById(R.id.startButtonIntentService);
+        Button startIntentService = findViewById(R.id.startIntentServiceButton);
         startIntentService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,12 +76,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button stopAllServices = findViewById(R.id.stopButtonService);
+        Button stopAllServices = findViewById(R.id.stopServiceButton);
         stopAllServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stopService(new Intent(v.getContext(), FirstSevice.class));
                 stopService(new Intent(v.getContext(), MyIntentService.class));
+            }
+        });
+
+        final Button sendBroadcastMsg = findViewById(R.id.sendBroadcastMsgButton);
+        sendBroadcastMsg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SEND_NEW_BROADCAST_MSG);
+
+                intent.putExtra(MainActivity.SEND_NEW_BROADCAST_MSG, textEdit.getText().toString());
+                intent.addFlags(intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                sendBroadcast(intent);
             }
         });
     }
@@ -93,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart()
     {
         super.onStart();
-
+        registerReceiver(receiver, new IntentFilter(MainActivity.SEND_NEW_BROADCAST_MSG));
         Log.d(LOG_TEG, "onStart");
     }
 

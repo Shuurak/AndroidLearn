@@ -31,7 +31,7 @@
         app:layout_constraintVertical_bias="0.977" />
 
     <Button
-        android:id="@+id/startButtonExpl"
+        android:id="@+id/startExplButton"
         android:layout_width="89dp"
         android:layout_height="119dp"
 
@@ -41,40 +41,51 @@
         app:layout_constraintLeft_toLeftOf="parent"/>
 
     <Button
-        android:id="@+id/startButtonService"
+        android:id="@+id/sendBroadcastMsgButton"
         android:layout_width="89dp"
         android:layout_height="119dp"
 
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="156dp"
-        android:text="Start first service"
+        android:layout_marginTop="256dp"
+        android:text="Send broadcast"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <Button
-        android:id="@+id/stopButtonService"
+        android:id="@+id/stopServiceButton"
         android:layout_width="89dp"
         android:layout_height="119dp"
 
         android:layout_marginLeft="160dp"
-        android:layout_marginTop="156dp"
+        android:layout_marginTop="128dp"
         android:text="Stop all services"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <Button
-        android:id="@+id/startButtonIntentService"
+        android:id="@+id/startServiceButton"
+        android:layout_width="89dp"
+        android:layout_height="119dp"
+
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="128dp"
+        android:text="Start first service"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <Button
+        android:id="@+id/startIntentServiceButton"
         android:layout_width="89dp"
         android:layout_height="119dp"
 
         android:layout_marginLeft="304dp"
-        android:layout_marginTop="156dp"
+        android:layout_marginTop="128dp"
         android:text="Start intent service"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <Button
-        android:id="@+id/startButtonIpml"
+        android:id="@+id/startIpmlButton"
         android:layout_width="89dp"
         android:layout_height="119dp"
         android:layout_marginEnd="16dp"
@@ -85,7 +96,7 @@
         app:layout_constraintRight_toRightOf="parent"/>
 
     <EditText
-        android:id="@+id/onMainLogger"
+        android:id="@+id/onMainTextLine"
         android:layout_width="383dp"
         android:layout_height="105dp"
         android:ems="10"
