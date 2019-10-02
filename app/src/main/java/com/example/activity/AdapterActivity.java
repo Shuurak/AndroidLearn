@@ -1,5 +1,6 @@
 package com.example.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -9,24 +10,41 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class AdapterActivity extends AppCompatActivity {
+
+    private ArrayList<String> args;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_adapter2);
+        setContentView(R.layout.activity_adapter);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+
+        Intent intent = getIntent();
+        args = intent.getStringArrayListExtra(MainActivity.ADDITIONAL_MSG);
+
+        ListView listView = findViewById(R.id.listView);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.simple_list_item_1, args);
+
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(view.getContext(), args.get(position), Toast.LENGTH_LONG).show();
             }
         });
+
     }
 
 }
