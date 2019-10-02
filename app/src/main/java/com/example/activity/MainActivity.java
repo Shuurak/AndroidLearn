@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,13 +19,15 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TEG = "Activity state info";
     public static final String ACT_FOR_START_NEW_ACT = "com.example.activity.START_SECOND_ACT";
     public static final String SEND_NEW_BROADCAST_MSG = "com.example.activity.SEND_NEW_BROADCAST";
+    public static final String SHOW_ADAPTERS_ACT = "com.example.activity.SHOW_ADAPTER_ACT";
     public static final String ADDITIONAL_MSG = "ADDITIONAL_MSG";
 
     private int taskNum = 0;
-    Random rand = new Random();
+    private Random rand = new Random();
 
-    public EditText textEdit;
+    private EditText textEdit;
     private MyReceiver receiver = new MyReceiver();
+    private ArrayList<String> args = new ArrayList<>();
 
 
     @Override
@@ -93,7 +96,29 @@ public class MainActivity extends AppCompatActivity {
 
                 intent.putExtra(MainActivity.SEND_NEW_BROADCAST_MSG, textEdit.getText().toString());
                 intent.addFlags(intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+
                 sendBroadcast(intent);
+            }
+        });
+
+        Button showAdapterButton = findViewById(R.id.showAdapterActButton);
+        showAdapterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                args.add("UK");
+                args.add("USA");
+                args.add("Japan");
+                args.add("France");
+                args.add("Russia");
+                args.add("China");
+                args.add("Canada");
+                args.add("Australia");
+                args.add("Germany");
+
+                Intent intent = new Intent(SHOW_ADAPTERS_ACT);
+                intent.putExtra(ADDITIONAL_MSG, args);
+
+                startActivity(intent);
             }
         });
     }
@@ -135,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
     {
         super.onStop();
 
+        unregisterReceiver(receiver);
         Log.d(LOG_TEG, "onStop");
     }
 
