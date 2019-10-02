@@ -68,7 +68,7 @@ public class FirstSevice extends Service {
     }
 
     String returnThruBinder (String str) {
-        Log.d(LOG_TEG, "new msg from activity: "+str);
+        Log.d(LOG_TEG, "new msg from activity: " + str);
         return "You say: "+str;
     }
 }
