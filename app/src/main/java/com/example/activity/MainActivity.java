@@ -2,6 +2,8 @@ package com.example.activity;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.RemoteInput;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -173,25 +175,33 @@ public class MainActivity extends AppCompatActivity {
                 String str = servForBind.returnThruBinder(textEdit.getText().toString());
                 Log.d(LOG_TEG, str);
 
-                String CHANNEL_ID = "MyActivityChannel";
-                String channelName = "Service returner";
-                int importance = NotificationManager.IMPORTANCE_DEFAULT;
-
-                NotificationChannel channel = new NotificationChannel(CHANNEL_ID, channelName, importance);
-
-                NotificationManager notificationManager = getSystemService(NotificationManager.class);
-                notificationManager.createNotificationChannel(channel);
-
-
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(v.getContext(), CHANNEL_ID)
-                        .setContentTitle("New message from service")
-                        .setContentText(str)
-                        .setSmallIcon(R.drawable.ic_launcher_background)
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                            .bigText(str))
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-                notificationManager.notify(0, builder.build());
+//                String CHANNEL_ID = "MyActivityChannel";
+//                String channelName = "Service returner";
+//                int importance = NotificationManager.IMPORTANCE_DEFAULT;
+//
+//                NotificationChannel channel = new NotificationChannel(CHANNEL_ID, channelName, importance);
+//
+//                NotificationManager notificationManager = getSystemService(NotificationManager.class);
+//                notificationManager.createNotificationChannel(channel);
+//
+////                String replyLabel = "Reply";
+////                RemoteInput remoteInput = new RemoteInput.Builder(NOTIFIER_MSG_REPLY)
+////                        .setLabel(replyLabel)
+////                        .build();
+////
+////                PendingIntent replyPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0,
+////                            con)
+//
+//
+//                NotificationCompat.Builder builder = new NotificationCompat.Builder(v.getContext(), CHANNEL_ID)
+//                        .setContentTitle("New message from service")
+//                        .setContentText(str)
+//                        .setSmallIcon(R.drawable.ic_launcher_background)
+//                        .setStyle(new NotificationCompat.BigTextStyle()
+//                            .bigText(str))
+//                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+//
+//                notificationManager.notify(0, builder.build());
 
             }
         });
