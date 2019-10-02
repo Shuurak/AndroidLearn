@@ -9,16 +9,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".AdapterActivity"
+            android:label="@string/title_activity_adapter"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="com.example.activity.SHOW_ADAPTER_ACT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <receiver
             android:name=".MyReceiver"
             android:enabled="true"
-            android:exported="true" >
-
+            android:exported="true">
             <intent-filter>
-                <action android:name="com.example.activity.SEND_NEW_BROADCAST"    />
-                </intent-filter>
-
-            </receiver>
+                <action android:name="com.example.activity.SEND_NEW_BROADCAST" />
+            </intent-filter>
+        </receiver>
 
         <service
             android:name=".MyIntentService"

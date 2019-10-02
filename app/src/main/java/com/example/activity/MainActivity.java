@@ -1,15 +1,20 @@
 package com.example.activity;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -29,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
     private MyReceiver receiver = new MyReceiver();
     private ArrayList<String> args = new ArrayList<>();
 
+    private ServiceConnection serConn;
+    private boolean bindFlag = false;
+    private FirstSevice servForBind;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -38,6 +46,22 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TEG, "onCreate");
 
         textEdit = findViewById(R.id.onMainTextLine);
+
+        serConn = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                Log.d(LOG_TEG, "bind status - onServiceConnected");
+
+                servForBind = ((FirstSevice.customBinder)service).getService();
+                bindFlag = true;
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                Log.d(LOG_TEG, "bind status - onServiceDisconnected");
+                bindFlag = false;
+            }
+        };
 
         Button explicit = findViewById(R.id.startExplButton);
         explicit.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), MyIntentService.class);
                 intent.putExtra(MyIntentService.SERVICE_PARAM_TASK, "Task #" + taskNum++);
-                intent.putExtra(MyIntentService.SERVICE_PARAM_TIME, rand.nextInt(8)+10);
+                intent.putExtra(MyIntentService.SERVICE_PARAM_TIME, rand.nextInt(8) + 10);
 
                 startService(intent);
             }
@@ -121,6 +145,57 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        Button bindToServiceButton = findViewById(R.id.bindToServiceButton);
+        bindToServiceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), FirstSevice.class);
+
+                bindService(intent, serConn, BIND_AUTO_CREATE);
+            }
+        });
+
+        Button unbindFromServiceButton = findViewById(R.id.unbindFromServiceButton);
+        unbindFromServiceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!bindFlag) return;
+                unbindService(serConn);
+                bindFlag = false;
+            }
+        });
+
+        Button sendMsgToBindedService = findViewById(R.id.sendMsgToBindedServiceButton);
+        sendMsgToBindedService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!bindFlag) return;
+                String str = servForBind.returnThruBinder(textEdit.getText().toString());
+                Log.d(LOG_TEG, str);
+
+                String CHANNEL_ID = "MyActivityChannel";
+                String channelName = "Service returner";
+                int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+                NotificationChannel channel = new NotificationChannel(CHANNEL_ID, channelName, importance);
+
+                NotificationManager notificationManager = getSystemService(NotificationManager.class);
+                notificationManager.createNotificationChannel(channel);
+
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(v.getContext(), CHANNEL_ID)
+                        .setContentTitle("New message from service")
+                        .setContentText(str)
+                        .setSmallIcon(R.drawable.ic_launcher_background)
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText(str))
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                notificationManager.notify(0, builder.build());
+
+            }
+        });
     }
 
     @Override
@@ -140,16 +215,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
+        
         super.onResume();
 
         Log.d(LOG_TEG, "onResume");
     }
 
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
+    
         super.onPause();
 
         Log.d(LOG_TEG, "onPause");
