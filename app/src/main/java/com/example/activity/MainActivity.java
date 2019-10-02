@@ -39,8 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private FirstSevice servForBind;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(LOG_TEG, "onCreate");
@@ -199,16 +198,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
         registerReceiver(receiver, new IntentFilter(MainActivity.SEND_NEW_BROADCAST_MSG));
         Log.d(LOG_TEG, "onStart");
     }
 
     @Override
-    protected void onRestart()
-    {
+    protected void onRestart() {
         super.onRestart();
 
         Log.d(LOG_TEG, "onRestart");
@@ -231,8 +228,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop()
-    {
+    protected void onStop() {
         super.onStop();
 
         unregisterReceiver(receiver);
@@ -240,43 +236,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         super.onDestroy();
 
         Log.d(LOG_TEG, "onDestroy");
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle saveInstState)
-    {
+    protected void onSaveInstanceState(Bundle saveInstState) {
         super.onSaveInstanceState(saveInstState);
 
         Log.d(LOG_TEG, "SaveInstanceState");
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle saveInstState)
-    {
+    protected void onRestoreInstanceState(Bundle saveInstState) {
         super.onRestoreInstanceState(saveInstState);
 
         Log.d(LOG_TEG, "RestoreInstanceState");
     }
-
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-//        Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-//    }
 }

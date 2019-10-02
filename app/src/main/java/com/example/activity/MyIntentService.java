@@ -26,15 +26,13 @@ public class MyIntentService extends IntentService {
     }
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         super.onCreate();
         Log.d(LOG_TEG, "onCreate");
     }
 
     @Override
-    protected void onHandleIntent(Intent intent)
-    {
+    protected void onHandleIntent(Intent intent) {
         int timestamp = intent.getIntExtra(SERVICE_PARAM_TIME, 0);
         String task = intent.getStringExtra(SERVICE_PARAM_TASK);
 
@@ -45,8 +43,7 @@ public class MyIntentService extends IntentService {
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
         Log.d(LOG_TEG, "onDestroy");
     }

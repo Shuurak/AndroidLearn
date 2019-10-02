@@ -30,51 +30,44 @@ public class FirstSevice extends Service {
     }
 
     @Override
-    public boolean onUnbind(Intent intent)
-    {
+    public boolean onUnbind(Intent intent) {
         Log.d(LOG_TEG, "service onUnbind");
         return true;
     }
 
     @Override
-    public void onRebind(Intent intent)
-    {
+    public void onRebind(Intent intent) {
         super.onRebind(intent);
         Log.d(LOG_TEG, "service onRebind");
     }
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         super.onCreate();
         Log.d(LOG_TEG, "onCreate");
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
         Log.d(LOG_TEG, "onDestroy");
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId)
-    {
+    public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(LOG_TEG, "onStartCommand");
         todoFunc();
 
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void todoFunc()
-    {
+    private void todoFunc() {
         SystemClock.sleep(300);
         ++cycles;
         Log.d(LOG_TEG, "cycles count: "+cycles);
     }
 
-    String returnThruBinder (String str)
-    {
+    String returnThruBinder (String str) {
         Log.d(LOG_TEG, "new msg from activity: "+str);
         return "You say: "+str;
     }

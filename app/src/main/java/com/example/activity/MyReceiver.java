@@ -10,8 +10,7 @@ public class MyReceiver extends BroadcastReceiver {
 
     private static final String LOG_TEG = "Receiver state info";
 
-    public MyReceiver()
-    {
+    public MyReceiver() {
 
     }
 
