@@ -1,5 +1,6 @@
 package com.example.activity;
 
+import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -15,12 +16,13 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.RemoteInput;
 
 
-public class FirstSevice extends Service {
+public class FirstSevice extends IntentService {
 
     private static final String LOG_TEG = "Service state info";
     private int cycles = 0;
@@ -50,6 +52,15 @@ public class FirstSevice extends Service {
         FirstSevice getService() {
             return FirstSevice.this;
         }
+    }
+
+    public FirstSevice(String name) {
+        super(name);
+    }
+
+    @Override
+    protected void onHandleIntent(@Nullable Intent intent) {
+        todoFunc();
     }
 
     @Override
@@ -104,7 +115,6 @@ public class FirstSevice extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(LOG_TEG, "onStartCommand");
-        todoFunc();
 
         return super.onStartCommand(intent, flags, startId);
     }
