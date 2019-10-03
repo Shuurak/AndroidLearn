@@ -5,7 +5,6 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -22,9 +21,9 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.RemoteInput;
 
 
-public class FirstSevice extends IntentService {
+public class FirstService extends IntentService {
 
-    private static final String LOG_TEG = "Service state info";
+    private static final String TAG = "FirstService";
     private int cycles = 0;
 
     public static final String NOTIFIER_MSG_REPLY = "NOTIFIER_MSG_REPLY_INPUT";
@@ -49,17 +48,18 @@ public class FirstSevice extends IntentService {
     InnerReceiver innerReceiver = new InnerReceiver();
 
     class customBinder extends Binder {
-        FirstSevice getService() {
-            return FirstSevice.this;
+        FirstService getService() {
+            return FirstService.this;
         }
     }
 
-    public FirstSevice(String name) {
-        super(name);
+    public FirstService() {
+        super(FirstService.class.toString());
     }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+        Log.d(TAG, "onHandleIntent: ");
         todoFunc();
     }
 
@@ -67,27 +67,27 @@ public class FirstSevice extends IntentService {
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
 
-        Log.d(LOG_TEG, "service onBind");
+        Log.d(TAG, "onBind: ");
 //        throw new UnsupportedOperationException("Not yet implemented");
         return binder;
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
-        Log.d(LOG_TEG, "service onUnbind");
+        Log.d(TAG, "onUnbind: ");
         return true;
     }
 
     @Override
     public void onRebind(Intent intent) {
         super.onRebind(intent);
-        Log.d(LOG_TEG, "service onRebind");
+        Log.d(TAG, "onRebind: ");
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(LOG_TEG, "onCreate");
+        Log.d(TAG, "onCreate: ");
         initNotification();
         registerReceiver(innerReceiver, new IntentFilter(SEND_NEW_BROADCAST_MSG));
     }
@@ -108,13 +108,13 @@ public class FirstSevice extends IntentService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(LOG_TEG, "onDestroy");
+        Log.d(TAG, "onDestroy: ");
         unregisterReceiver(innerReceiver);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(LOG_TEG, "onStartCommand");
+        Log.d(TAG, "onStartCommand: ");
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -122,11 +122,11 @@ public class FirstSevice extends IntentService {
     private void todoFunc() {
         SystemClock.sleep(300);
         ++cycles;
-        Log.d(LOG_TEG, "cycles count: " + cycles);
+        Log.d(TAG, "todoFunc: cycles count " + cycles);
     }
 
     String returnThruBinder(String str) {
-        Log.d(LOG_TEG, "new msg from activity: " + str);
+        Log.d(TAG, "returnThruBinder: new msg from activity " + str);
 
         sendNotification(str);
 
@@ -137,7 +137,7 @@ public class FirstSevice extends IntentService {
 
         Intent intent = new Intent(SEND_NEW_BROADCAST_MSG);
 
-        intent.putExtra(FirstSevice.SEND_NEW_BROADCAST_MSG, NOTIFIER_MSG_REPLY);
+        intent.putExtra(FirstService.SEND_NEW_BROADCAST_MSG, NOTIFIER_MSG_REPLY);
         intent.addFlags(intent.FLAG_INCLUDE_STOPPED_PACKAGES);
 
         PendingIntent replyPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), requestCode,
@@ -173,14 +173,14 @@ public class FirstSevice extends IntentService {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            String msg = intent.getStringExtra(FirstSevice.SEND_NEW_BROADCAST_MSG);
-            if (msg.equals(FirstSevice.NOTIFIER_MSG_REPLY)) {
+            String msg = intent.getStringExtra(FirstService.SEND_NEW_BROADCAST_MSG);
+            if (msg.equals(FirstService.NOTIFIER_MSG_REPLY)) {
 
                 Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
                 closeReply(context);
 
                 if (remoteInput != null) {
-                    Log.d(LOG_TEG, remoteInput.getString(FirstSevice.NOTIFIER_MSG_REPLY));
+                    Log.d(TAG, "onReceive: " + remoteInput.getString(FirstService.NOTIFIER_MSG_REPLY));
 
                     return;
                 }

@@ -1,9 +1,5 @@
 package com.example.activity;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.RemoteInput;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -16,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -38,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ServiceConnection serConn;
     private boolean bindFlag = false;
-    private FirstSevice servForBind;
+    private FirstService servForBind;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             public void onServiceConnected(ComponentName name, IBinder service) {
                 Log.d(LOG_TEG, "bind status - onServiceConnected");
 
-                servForBind = ((FirstSevice.customBinder)service).getService();
+                servForBind = ((FirstService.customBinder)service).getService();
                 bindFlag = true;
             }
 
@@ -88,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         startService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startService(new Intent(v.getContext(), FirstSevice.class));
+                startService(new Intent(v.getContext(), FirstService.class));
             }
         });
 
@@ -108,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         stopAllServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                stopService(new Intent(v.getContext(), FirstSevice.class));
+                stopService(new Intent(v.getContext(), FirstService.class));
                 stopService(new Intent(v.getContext(), MyIntentService.class));
             }
         });
@@ -151,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         bindToServiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), FirstSevice.class);
+                Intent intent = new Intent(v.getContext(), FirstService.class);
 
                 bindService(intent, serConn, BIND_AUTO_CREATE);
             }

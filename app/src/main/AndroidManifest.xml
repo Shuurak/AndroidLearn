@@ -24,7 +24,7 @@
             android:name=".MyIntentService"
             android:exported="false" />
         <service
-            android:name=".FirstSevice"
+            android:name=".FirstService"
             android:enabled="true"
             android:exported="true" />
 

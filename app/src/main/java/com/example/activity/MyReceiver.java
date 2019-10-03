@@ -24,12 +24,12 @@ public class MyReceiver extends BroadcastReceiver {
         // an Intent broadcast.
 
         String msg = intent.getStringExtra(MainActivity.SEND_NEW_BROADCAST_MSG);
-        if (msg.equals(FirstSevice.NOTIFIER_MSG_REPLY)) {
+        if (msg.equals(FirstService.NOTIFIER_MSG_REPLY)) {
 
             Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
 
             if (remoteInput != null) {
-                Log.d(LOG_TEG, remoteInput.getString(FirstSevice.NOTIFIER_MSG_REPLY));
+                Log.d(LOG_TEG, remoteInput.getString(FirstService.NOTIFIER_MSG_REPLY));
 
                 NotificationManagerCompat.from(context).notify();
             }
