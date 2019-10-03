@@ -19,7 +19,6 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.RemoteInput;
 
-import java.util.ArrayList;
 
 public class FirstSevice extends Service {
 
@@ -87,10 +86,10 @@ public class FirstSevice extends Service {
     private void todoFunc() {
         SystemClock.sleep(300);
         ++cycles;
-        Log.d(LOG_TEG, "cycles count: "+cycles);
+        Log.d(LOG_TEG, "cycles count: " + cycles);
     }
 
-    String returnThruBinder (String str) {
+    String returnThruBinder(String str) {
         Log.d(LOG_TEG, "new msg from activity: " + str);
 
         sendNotification(str);
@@ -98,7 +97,7 @@ public class FirstSevice extends Service {
         return "You say: " + str;
     }
 
-    private void sendNotification (String msg) {
+    private void sendNotification(String msg) {
         String CHANNEL_ID = "MyActivityChannel";
 
         String channelName = "Service returner";
@@ -142,13 +141,6 @@ public class FirstSevice extends Service {
 
     class InnerReceiver extends BroadcastReceiver {
 
-        private NotificationManagerCompat notificationManagerCompat;
-        String CHANNEL_ID = "MyActivityChannel";
-
-//        InnerReceiver(NotificationManagerCompat _notificationManagerCompat) {
-//            notificationManagerCompat = _notificationManagerCompat;
-//        }
-
         @Override
         public void onReceive(Context context, Intent intent) {
             String msg = intent.getStringExtra(FirstSevice.SEND_NEW_BROADCAST_MSG);
@@ -159,14 +151,8 @@ public class FirstSevice extends Service {
                 if (remoteInput != null) {
                     Log.d(LOG_TEG, remoteInput.getString(FirstSevice.NOTIFIER_MSG_REPLY));
 
-//                    Notification repliedNotification = new Notification.Builder(context, CHANNEL_ID)
-//                            .setSmallIcon(R.drawable.ic_launcher_background)
-//                            .setContentText(context)
-//                            .build();
-
-//                    notificationManagerCompat.notify(,intent, repliedNotification);
+                    return;
                 }
-                return;
             }
         }
     }
