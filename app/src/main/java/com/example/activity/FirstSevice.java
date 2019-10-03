@@ -30,6 +30,12 @@ public class FirstSevice extends Service {
     public static final String NOTIFIFER_ID = "NOTIF_ID";
 
 
+    /* data for notification init*/
+    private static final String CHANNEL_ID = "MyActivityChannel";
+    private static final String channelName = "Service returner";
+    private int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+
     public IBinder binder = new customBinder();
 
     InnerReceiver innerReceiver = new InnerReceiver();
@@ -65,7 +71,12 @@ public class FirstSevice extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d(LOG_TEG, "onCreate");
+        initNotification();
         registerReceiver(innerReceiver, new IntentFilter(SEND_NEW_BROADCAST_MSG));
+    }
+
+    private void initNotification() {
+
     }
 
     @Override
@@ -98,45 +109,42 @@ public class FirstSevice extends Service {
     }
 
     private void sendNotification(String msg) {
-        String CHANNEL_ID = "MyActivityChannel";
 
-        String channelName = "Service returner";
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
-
-        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, channelName, importance);
-
-        NotificationManager notificationManager = getSystemService(NotificationManager.class);
-        notificationManager.createNotificationChannel(channel);
-
-        String replyLabel = "Reply";
-        RemoteInput remoteInput = new RemoteInput.Builder(NOTIFIER_MSG_REPLY)
-                .setLabel(replyLabel)
-                .build();
-
-        Intent intent = new Intent(SEND_NEW_BROADCAST_MSG);
-
-        intent.putExtra(FirstSevice.SEND_NEW_BROADCAST_MSG, NOTIFIER_MSG_REPLY);
-        intent.putExtra(FirstSevice.NOTIFIFER_ID, 989);
-//        intent.addFlags(intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-
-        PendingIntent replyPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 989,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Action action = new NotificationCompat.Action.Builder(R.drawable.ic_launcher_background, replyLabel, replyPendingIntent)
-                .addRemoteInput(remoteInput)
-                .build();
-
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-                .setContentTitle("New message from service")
-                .setContentText(msg)
-                .setSmallIcon(R.drawable.ic_launcher_background)
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(msg))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .addAction(action);
-
-        notificationManager.notify(0, builder.build());
+//
+//        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, channelName, importance);
+//
+//        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+//        notificationManager.createNotificationChannel(channel);
+//
+//        String replyLabel = "Reply";
+//        RemoteInput remoteInput = new RemoteInput.Builder(NOTIFIER_MSG_REPLY)
+//                .setLabel(replyLabel)
+//                .build();
+//
+//        Intent intent = new Intent(SEND_NEW_BROADCAST_MSG);
+//
+//        intent.putExtra(FirstSevice.SEND_NEW_BROADCAST_MSG, NOTIFIER_MSG_REPLY);
+//        intent.putExtra(FirstSevice.NOTIFIFER_ID, 989);
+////        intent.addFlags(intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+//
+//        PendingIntent replyPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 989,
+//                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        NotificationCompat.Action action = new NotificationCompat.Action.Builder(R.drawable.ic_launcher_background, replyLabel, replyPendingIntent)
+//                .addRemoteInput(remoteInput)
+//                .build();
+//
+//
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+//                .setContentTitle("New message from service")
+//                .setContentText(msg)
+//                .setSmallIcon(R.drawable.ic_launcher_background)
+//                .setStyle(new NotificationCompat.BigTextStyle()
+//                        .bigText(msg))
+//                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//                .addAction(action);
+//
+//        notificationManager.notify(0, builder.build());
     }
 
     class InnerReceiver extends BroadcastReceiver {
