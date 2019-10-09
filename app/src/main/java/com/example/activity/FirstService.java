@@ -11,9 +11,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.os.SystemClock;
 import android.util.Log;
+import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -24,6 +29,7 @@ public class FirstService extends IntentService {
 
     private static final String TAG = "FirstService";
     private int cycles = 0;
+    private Messenger mMainActHandler;
 
     public static final String NOTIFIER_MSG_REPLY = "NOTIFIER_MSG_REPLY_INPUT";
     public static final String SEND_NEW_BROADCAST_MSG = "com.example.activity.SEND_NOTIFIER_REPLY";
@@ -50,6 +56,10 @@ public class FirstService extends IntentService {
         FirstService getService() {
             return FirstService.this;
         }
+
+//        public void setHandler(MainActivity.MyHandler aHandler) {
+//            mMyHandler = aHandler;
+//        }
     }
 
     public FirstService() {
@@ -62,12 +72,14 @@ public class FirstService extends IntentService {
         todoFunc();
     }
 
+
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
 
         Log.d(TAG, "onBind: ");
 //        throw new UnsupportedOperationException("Not yet implemented");
+        mMainActHandler = intent.getParcelableExtra(MainActivity.MAIN_ACTIVITY_HANDLER);
         return binder;
     }
 
@@ -191,7 +203,17 @@ public class FirstService extends IntentService {
                 closeReply(context);
 
                 if (remoteInput != null) {
-                    Log.d(TAG, "onReceive: " + remoteInput.getString(FirstService.NOTIFIER_MSG_REPLY));
+                    String str = remoteInput.getString(FirstService.NOTIFIER_MSG_REPLY);
+                    Log.d(TAG, "onReceive: " + str);
+                    Message _msg = new Message();
+                    Bundle someData = new Bundle();
+                    someData.putString(NOTIFIER_MSG_REPLY, str);
+                    _msg.setData(someData);
+                    try {
+                        mMainActHandler.send(_msg);
+                    } catch (RemoteException aE) {
+                        aE.printStackTrace();
+                    }
                 }
                 else {
                     Log.d(TAG, "onReceive: remoteInput is null");

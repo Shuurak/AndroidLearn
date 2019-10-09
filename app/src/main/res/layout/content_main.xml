@@ -63,6 +63,17 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <Button
+        android:id="@+id/startAsyncTaskButton"
+        android:layout_width="89dp"
+        android:layout_height="119dp"
+
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="384dp"
+        android:text="Start async task"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <Button
         android:id="@+id/bindToServiceButton"
         android:layout_width="89dp"
         android:layout_height="119dp"
