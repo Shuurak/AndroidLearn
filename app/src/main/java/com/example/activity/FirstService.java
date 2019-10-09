@@ -17,7 +17,6 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.RemoteInput;
 
 
@@ -40,14 +39,14 @@ public class FirstService extends IntentService {
     private int notificationId = 852;
     RemoteInput remoteInput;
     NotificationManager notificationManager;
-    NotificationManagerCompat notificationManagerCompat;
 
 
-    public IBinder binder = new customBinder();
+    private IBinder binder = new CustomBinder();
 
-    InnerReceiver innerReceiver = new InnerReceiver();
+    private InnerReceiver innerReceiver = new InnerReceiver();
 
-    class customBinder extends Binder {
+    class CustomBinder extends Binder {
+
         FirstService getService() {
             return FirstService.this;
         }
@@ -96,13 +95,17 @@ public class FirstService extends IntentService {
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, channelName, importance);
 
         notificationManager = getSystemService(NotificationManager.class);
-        notificationManager.createNotificationChannel(channel);
 
-        notificationManagerCompat = NotificationManagerCompat.from(this);
+        if (notificationManager != null) {
 
-        remoteInput = new RemoteInput.Builder(NOTIFIER_MSG_REPLY)
-                .setLabel(replyLabel)
-                .build();
+            notificationManager.createNotificationChannel(channel);
+            remoteInput = new RemoteInput.Builder(NOTIFIER_MSG_REPLY)
+                    .setLabel(replyLabel)
+                    .build();
+        }
+        else {
+            Log.d(TAG, "initNotification: fail to init notifications");
+        }
     }
 
     @Override
@@ -135,41 +138,48 @@ public class FirstService extends IntentService {
 
     private void sendNotification(String msg) {
 
-        Intent intent = new Intent(SEND_NEW_BROADCAST_MSG);
+        if (notificationManager != null) {
+            Intent intent = new Intent(SEND_NEW_BROADCAST_MSG);
 
-        intent.putExtra(FirstService.SEND_NEW_BROADCAST_MSG, NOTIFIER_MSG_REPLY);
-        intent.addFlags(intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+            intent.putExtra(FirstService.SEND_NEW_BROADCAST_MSG, NOTIFIER_MSG_REPLY);
+            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
 
-        PendingIntent replyPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), requestCode,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent replyPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), requestCode,
+                    intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Action action = new NotificationCompat.Action.Builder(R.drawable.ic_launcher_background, replyLabel, replyPendingIntent)
-                .addRemoteInput(remoteInput)
-                .build();
+            NotificationCompat.Action action = new NotificationCompat.Action.Builder(R.drawable.ic_launcher_background, replyLabel, replyPendingIntent)
+                    .addRemoteInput(remoteInput)
+                    .build();
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-                .setContentTitle("New message from service")
-                .setContentText(msg)
-                .setSmallIcon(R.drawable.ic_launcher_background)
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(msg))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .addAction(action);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+                    .setContentTitle("New message from service")
+                    .setContentText(msg)
+                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText(msg))
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .addAction(action);
 
-        notificationManager.notify(notificationId, builder.build());
+            notificationManager.notify(notificationId, builder.build());
+        }
+        else {
+            Log.d(TAG, "sendNotification: notificationManager is failed init");
+        }
     }
 
-    protected void closeReply(Context context) {
+    private void closeReply(Context context) {
         Notification repliedNotification = new Notification.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .setContentText("Done")
                 .setTimeoutAfter(200)
                 .build();
 
-        notificationManagerCompat.notify(notificationId, repliedNotification);
+        notificationManager.notify(notificationId, repliedNotification);
     }
 
     class InnerReceiver extends BroadcastReceiver {
+
+        private static final String TAG = "InnerReceiver";
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -177,14 +187,19 @@ public class FirstService extends IntentService {
             if (msg.equals(FirstService.NOTIFIER_MSG_REPLY)) {
 
                 Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
+
                 closeReply(context);
 
                 if (remoteInput != null) {
                     Log.d(TAG, "onReceive: " + remoteInput.getString(FirstService.NOTIFIER_MSG_REPLY));
-
-                    return;
+                }
+                else {
+                    Log.d(TAG, "onReceive: remoteInput is null");
                 }
 
+            }
+            else {
+                Log.d(TAG, "onReceive: wrong msg structure");
             }
         }
     }

@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private ServiceConnection serConn;
     private boolean bindFlag = false;
     private FirstService servForBind;
+    private FirstService.CustomBinder mBinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,9 @@ public class MainActivity extends AppCompatActivity {
             public void onServiceConnected(ComponentName name, IBinder service) {
                 Log.d(LOG_TEG, "bind status - onServiceConnected");
 
-                servForBind = ((FirstService.customBinder)service).getService();
+                mBinder = (FirstService.CustomBinder) service;
+
+                servForBind = mBinder.getService();
                 bindFlag = true;
             }
 
@@ -169,35 +172,6 @@ public class MainActivity extends AppCompatActivity {
                 if (!bindFlag) return;
                 String str = servForBind.returnThruBinder(textEdit.getText().toString());
                 Log.d(LOG_TEG, str);
-
-//                String CHANNEL_ID = "MyActivityChannel";
-//                String channelName = "Service returner";
-//                int importance = NotificationManager.IMPORTANCE_DEFAULT;
-//
-//                NotificationChannel channel = new NotificationChannel(CHANNEL_ID, channelName, importance);
-//
-//                NotificationManager notificationManager = getSystemService(NotificationManager.class);
-//                notificationManager.createNotificationChannel(channel);
-//
-////                String replyLabel = "Reply";
-////                RemoteInput remoteInput = new RemoteInput.Builder(NOTIFIER_MSG_REPLY)
-////                        .setLabel(replyLabel)
-////                        .build();
-////
-////                PendingIntent replyPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0,
-////                            con)
-//
-//
-//                NotificationCompat.Builder builder = new NotificationCompat.Builder(v.getContext(), CHANNEL_ID)
-//                        .setContentTitle("New message from service")
-//                        .setContentText(str)
-//                        .setSmallIcon(R.drawable.ic_launcher_background)
-//                        .setStyle(new NotificationCompat.BigTextStyle()
-//                            .bigText(str))
-//                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-//
-//                notificationManager.notify(0, builder.build());
-
             }
         });
     }
