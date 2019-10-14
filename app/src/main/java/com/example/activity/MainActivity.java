@@ -222,14 +222,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class MyAsyncTask extends AsyncTask<CharSequence , Void, Void> {
+    private class MyAsyncTask extends AsyncTask<CharSequence, Void, Void> {
 
         @Override
         protected Void doInBackground(CharSequence... aStrings) {
-            for (int i = 0; i < aStrings.length; i++) {
+            for (CharSequence aString : aStrings) {
                 if (!isCancelled()) {
                     SystemClock.sleep(5000);
-                    Log.d(LOG_TEG, "doInBackground: "+aStrings[i]);
+                    Log.d(LOG_TEG, "doInBackground: " + aString);
                 }
             }
             return null;
